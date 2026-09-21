@@ -175,6 +175,7 @@ class PublicVar{
     var folderStepForwardStack = [String]()
     var folderStepForLocate = [(String,RightMouseGestureDirection)]()
     var folderStepForLocateTime: DispatchTime = .now()
+    var folderScrollPos = [String:NSPoint]()
     var filesForLocateAfterChange = [String]()
     var filesForLocateAfterChangeTime: DispatchTime = .now()
     var isInFileOperation = false
@@ -1573,7 +1574,8 @@ class ViewController: NSViewController, NSSplitViewDelegate, NSSearchFieldDelega
                                 let curTime = DispatchTime.now()
                                 let nanoTime = curTime.uptimeNanoseconds - startTime.uptimeNanoseconds
                                 let timeInterval = Double(nanoTime) / 1_000_000_000
-                                if i>40 || i==count-1 || timeInterval>0.3 {
+                                // Restore scroll position before removing snapshot, at the latest until the 0.5s timer removes snapshot
+                                if (i>40 || i==count-1 || timeInterval>0.3) && restoreFolderScrollPos(folder: curFolder, fileCount: count, isProgressReady: i>40 || i==count-1) {
                                     
                                     if snapshotQueue.count > 0 {
                                         let curTime = DispatchTime.now()
