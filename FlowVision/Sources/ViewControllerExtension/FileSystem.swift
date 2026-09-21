@@ -997,7 +997,7 @@ extension ViewController {
             publicVar.folderScrollPos[folder] = nil
             return true
         }
-        // Wait until "Locate folder when going up or back" is over and thumbnails are ready
+        // Wait for thumbnail progress, "Locate folder when going up or back" is over and layout is enough or everything is inserted to restore
         guard isProgressReady,
               collectionView.numberOfItems(inSection: 0) >= fileCount
                 || (publicVar.folderStepForLocate.isEmpty && collectionView.bounds.height - scrollView.contentSize.height >= savedContentOffset.y)
