@@ -837,7 +837,7 @@ extension ViewController {
         fileDB.db[SortKeyDir(path)]?.lastLayoutCalcPosUsed=0
         fileDB.unlock()
         // Remember where the folder being left was scrolled to if it has been scrolled
-        if lastCurFolder != path, publicVar.folderScrollPos[lastCurFolder] == nil,
+        if lastCurFolder != path,
            let scrollView = collectionView.enclosingScrollView,
            scrollView.contentView.bounds.origin.y > 0 {
             publicVar.folderScrollPos[lastCurFolder] = scrollView.contentView.bounds.origin
@@ -989,7 +989,7 @@ extension ViewController {
     }
     
     // Restore where it was scrolled, return false while it's waiting
-    func restoreFolderScrollPos(folder: String, fileCount: Int, isProgressReady: Bool) -> Bool {
+    func restoreFolderScrollPos(folder: String, fileCount: Int) -> Bool {
         guard let savedContentOffset = publicVar.folderScrollPos[folder],
               let scrollView = collectionView.enclosingScrollView else { return true }
         // Avoid flashing, give up
@@ -997,9 +997,8 @@ extension ViewController {
             publicVar.folderScrollPos[folder] = nil
             return true
         }
-        // Wait for thumbnail progress, "Locate folder when going up or back" is over and layout is enough or everything is inserted to restore
-        guard isProgressReady,
-              collectionView.numberOfItems(inSection: 0) >= fileCount
+        // Wait until "Locate folder when going up or back" is over and layout is enough or everything is inserted to restore
+        guard collectionView.numberOfItems(inSection: 0) >= fileCount
                 || (publicVar.folderStepForLocate.isEmpty && collectionView.bounds.height - scrollView.contentSize.height >= savedContentOffset.y)
         else { return false }
         publicVar.folderScrollPos[folder] = nil
