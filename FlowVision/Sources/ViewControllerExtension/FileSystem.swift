@@ -1013,9 +1013,7 @@ extension ViewController {
         collectionView.reloadData()
         collectionView.selectionIndexPaths = savedSelection
         collectionView.numberOfItems(inSection:0)
-        DispatchQueue.main.async { [weak self] in
-            self?.setLoadThumbPriority(ifNeedVisable: true)
-        }
+        debounceSetLoadThumbPriority(interval: 0.1, ifNeedVisable: true)
         return true
     }
     
